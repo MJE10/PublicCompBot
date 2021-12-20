@@ -1,0 +1,27 @@
+{
+  "name": "compbot2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "canvas": "^2.8.0",
+    "discord.js": "^13.1.0",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
+    "scramble-generator": "^0.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MJE10/compbot2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MJE10/compbot2/issues"
+  },
+  "homepage": "https://github.com/MJE10/compbot2#readme",
+  "description": ""
+}

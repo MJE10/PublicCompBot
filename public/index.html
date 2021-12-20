@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CompBot Scoreboard</title>
+    <meta name="author" content="Michael Elia">
+    <script src='https://code.jquery.com/jquery-3.1.0.min.js'></script>
+</head>
+
+<body>
+    <div id="scoreboard">
+        <div id="header">
+            <h2>Live Scoreboard</h2>
+        </div>
+    </div>
+</body>
+
+<style>
+    * {
+        color: white;
+        font-family: sans-serif;
+        font-weight: 800;
+    }
+
+    body {
+        background-color: black;
+        text-align: center;
+    }
+
+    #scoreboard {
+        position: fixed;
+        display: block;
+        height: 80%;
+        width: 70%;
+        top: 10%;
+        left: 15%;
+        background-color: rgb(0, 84, 47);
+        transform: skewX(-8deg);
+        border-radius: 60px 0px 60px 0px;
+        overflow-y: scroll;
+    }
+    
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    #scoreboard::-webkit-scrollbar {
+    display: none;
+    }
+
+    h2 {
+        font-size: 36px;
+        padding: 5px;
+    }
+
+    .entry {
+        position: fixed;
+        text-align: right;
+        width: 85%;
+        left: 7.5%;
+        top: 50px;
+        transition: top 1s ease-in-out;
+    }
+
+    .entry div {
+        display: inline-block;
+        padding: 3px 0px 3px 0px;
+    }
+
+    h3 {
+        margin: 0 15px 0 15px;
+    }
+
+    #titles h3 {
+        margin: 0;
+    }
+
+    .place, .name {
+        float: left;
+    }
+
+    .single, .average {
+        font-style: normal;
+    }
+
+    .entry {
+        background-color: rgb(2, 161, 90);
+    }
+
+    .place {
+        width: 3em;
+    }
+
+    .average {
+        height: 100%;
+        width: 7em;
+        background-color: rgb(0, 54, 30);
+    }
+</style>
+
+<script>
+
+    scores = {}
+
+    function main() {
+        getScores();
+    }
+
+    function getScores() {
+        fetch('/scores')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (Object.keys(scores).length > data.length) window.location.reload(false);
+                for (let i = 0; i < data.length; i++) {
+                    data[i]['n'] = (i+1).toString();
+                    if (!(data[i]['competitor'] in scores)) {
+                        scores[data[i]['competitor']] = data;
+                        $("#scoreboard").append('<div class="entry" id="entry'+data[i]['competitor']+'"><div class="place"><h3>'+data[i]['n']+'</h3></div><div class="name"><h3>'+data[i]['display_name']+'</h3></div><div class="single"><h3>'+data[i]['time']+'</h3></div><div class="average"><h3>'+'N/A'+'</h3></div></div>');
+                    }
+                    else {
+                        scores[data[i]['competitor']] = data;
+                        $("#entry"+data[i]['competitor']+" .place h3").text(data[i]['n']);
+                        $("#entry"+data[i]['competitor']+" .single h3").text(data[i]['time']);
+                    }
+                    $("#entry"+data[i]['competitor']).css("top", (parseInt(data[i]['n'])*40+100)+"px");
+                }
+            });
+        setTimeout(getScores, 2000);
+    }
+
+    $(document).ready(main);
+
+</script>
+
+</html>
